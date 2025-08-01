@@ -3,10 +3,13 @@ import passport from "passport";
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import { COOKIE_MAX_AGE } from "../config";
+import { prismaClient } from "@repo/db/client";
+import dotenv from "dotenv";
+dotenv.config();
 
 const authRouter: Router = Router();
 const CLIENT_URL = process.env.AUTH_REDIRECT_URL;
-const JWT_SECRET = process.env.JWT_SECRET || "keyboard cat";
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 interface userJwtClaims {
   userId: string;
@@ -26,11 +29,14 @@ authRouter.get("/guest", async (req: Request, res: Response) => {
   let guestUUID = `guest-${uuidv4()}`;
   //create the user
 
-  const user = {
-    id: "123",
-    name: "resham",
-    isGuest: true,
-  };
+  const user = await prismaClient.user.create({
+    data: {
+      username: guestUUID,
+      email: guestUUID + "@chess100x.com",
+      name: bodyData.name || guestUUID,
+      provider: "GUEST",
+    },
+  });
 
   const token = jwt.sign(
     { userId: user.id, name: user.name, isGuest: true },
@@ -50,6 +56,36 @@ authRouter.get("/guest", async (req: Request, res: Response) => {
 authRouter.get("/refresh", async (req: Request, res: Response) => {
   if (req.user) {
     const user = req.user as UserDetails;
+
+    const userDb = await prismaClient.user.findFirst({
+      where: {
+        id: user.id,
+      },
+    });
+    console.log(JWT_SECRET);
+    const token = jwt.sign({ userId: user.id, name: userDb?.name }, JWT_SECRET);
+    res.json({
+      token,
+      id: user.id,
+      name: userDb?.name,
+    });
+  } else if (req.cookies && req.cookies.guest) {
+    const decoded = jwt.verify(req.cookies.guest, JWT_SECRET) as userJwtClaims;
+    const token = jwt.sign(
+      { userId: decoded.userId, name: decoded.name, isGuest: true },
+      JWT_SECRET
+    );
+    let User: UserDetails = {
+      id: decoded.userId,
+      name: decoded.name,
+      token: token,
+      isGuest: true,
+    };
+
+    res.cookie("guest", token, { maxAge: COOKIE_MAX_AGE });
+    res.json(User);
+  } else {
+    res.status(401).json({ success: false, message: "Unauthorized" });
   }
 });
 
