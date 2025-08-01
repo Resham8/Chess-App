@@ -73,3 +73,5 @@ class SocketManager {
     this.userRoomMapping.delete(user.userId);
   }
 }
+
+export const socketManager = SocketManager.getInstance()

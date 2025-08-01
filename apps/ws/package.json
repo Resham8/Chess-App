@@ -9,6 +9,7 @@
     "dev": "pnpm build && pnpm start"
   },
   "devDependencies": {
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*"
   },
   "keywords": [],
@@ -19,6 +20,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.3",
     "@types/ws": "^8.18.1",
+    "chess.js": "^1.4.0",
+    "dotenv": "^17.2.1",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.3"
   }
