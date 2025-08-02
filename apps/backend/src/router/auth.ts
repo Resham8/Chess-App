@@ -24,10 +24,10 @@ interface UserDetails {
   isGuest?: boolean;
 }
 
-authRouter.get("/guest", async (req: Request, res: Response) => {
+authRouter.post("/guest", async (req: Request, res: Response) => {
   const bodyData = req.body;
   let guestUUID = `guest-${uuidv4()}`;
-  //create the user
+  
 
   const user = await prismaClient.user.create({
     data: {

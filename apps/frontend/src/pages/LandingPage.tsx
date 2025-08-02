@@ -20,8 +20,8 @@ export default function LandingPage() {
             <h1 className="text-4xl font-bold text-white">
               Play Chess Online
             </h1>
-            <Link to="/game">
-              <Button label="Play Online" />
+            <Link to="/game/random">
+              <Button label="Play Online"/>
             </Link>
           </div>
         </div>
