@@ -33,7 +33,7 @@ export default function ChessBoard({
     kw: "wk.png",
     kb: "bk.png",
   };
-                    {console.log(board)}
+
   return (
     <div className="text-white">
       {board.map((row, i) => {
@@ -78,9 +78,12 @@ export default function ChessBoard({
                     (i + j) % 2 === 0 ? "bg-yellow-900" : "bg-yellow-100"
                   }`}
                 >
-
-                  <div className="flex h-full justify-center items-center text-3xl">                    
-                    {square ? (<img src={pieceSymbols[square.type + square.color[0]]} />)   : ""}
+                  <div className="flex h-full justify-center items-center text-3xl">
+                    {square ? (
+                      <img src={pieceSymbols[square.type + square.color[0]]} />
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               );

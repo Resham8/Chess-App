@@ -1,11 +1,15 @@
 import { useRef } from "react";
 import Button from "../components/Button";
 import axios from "axios";
+import useUserStore from "@repo/store/userStore";
+import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
 export default function Login() {
   const guestName = useRef<HTMLInputElement>(null);
+  const setUser = useUserStore((s) => s.setUser);
+  const navigate = useNavigate();
 
   function google() {
     window.open(`${BACKEND_URL}/auth/google`, "_self");
@@ -17,8 +21,10 @@ export default function Login() {
     });
 
     const user = response.data;
+    setUser(user); 
     console.log(user);
-  }
+    navigate('/game/random');
+  } 
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
