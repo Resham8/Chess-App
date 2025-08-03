@@ -1,6 +1,7 @@
 import passport from "passport";
 import session from "express-session";
 import dotenv from "dotenv";
+import { prismaClient } from "@repo/db/client";
 dotenv.config();
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -20,17 +21,25 @@ export function initPassport() {
         clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: "/auth/google/callback",
       },
-      function (
+      async function (
         accessToken: string,
         refereshToken: string,
         profile: any,
         done: (error: any, user?: any) => void
       ) {
-        // db call
-        const user = {
-          id: 1,
-          username: "test",
-        };
+        const user = await prismaClient.user.upsert({
+          create: {
+            email: profile.emails[0].value,
+            name: profile.displayName,
+            provider: "GOOGLE",
+          },
+          update: {
+            name: profile.displayName,
+          },
+          where: {
+            email: profile.emails[0].value,
+          },
+        });
         done(null, user);
       }
     )

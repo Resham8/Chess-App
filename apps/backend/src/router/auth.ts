@@ -27,7 +27,6 @@ interface UserDetails {
 authRouter.post("/guest", async (req: Request, res: Response) => {
   const bodyData = req.body;
   let guestUUID = `guest-${uuidv4()}`;
-  
 
   const user = await prismaClient.user.create({
     data: {
@@ -50,7 +49,7 @@ authRouter.post("/guest", async (req: Request, res: Response) => {
     isGuest: true,
   };
   res.cookie("guest", token, { maxAge: COOKIE_MAX_AGE });
-  res.json({ UserDetails, guestUUID });
+  res.json(UserDetails);
 });
 
 authRouter.get("/refresh", async (req: Request, res: Response) => {
@@ -62,7 +61,7 @@ authRouter.get("/refresh", async (req: Request, res: Response) => {
         id: user.id,
       },
     });
-    console.log(JWT_SECRET);
+
     const token = jwt.sign({ userId: user.id, name: userDb?.name }, JWT_SECRET);
     res.json({
       token,
@@ -115,11 +114,11 @@ authRouter.get(
 );
 
 authRouter.get(
-  "/google/callbacke",
-  passport.authenticate("google", {
+  '/google/callback',
+  passport.authenticate('google', {
     successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
+    failureRedirect: '/login/failed',
+  }),
 );
 
 export default authRouter;
