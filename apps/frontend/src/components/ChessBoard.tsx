@@ -20,18 +20,18 @@ export default function ChessBoard({
   const [from, setFrom] = useState<Square | null>(null);
   const [to, setTo] = useState<Square | null>(null);
   const pieceSymbols: Record<string, string> = {
-    pw: "wp.png",
-    pb: "bp.png",
-    nw: "wn.png",
-    nb: "bn.png",
-    bw: "wb.png",
-    bb: "bb.png",
-    rw: "wr.png",
-    rb: "br.png",
-    qw: "wq.png",
-    qb: "bp.png",
-    kw: "wk.png",
-    kb: "bk.png",
+    pw: "/wp.png",
+    pb: "/bp.png",
+    nw: "/wn.png",
+    nb: "/bn.png",
+    bw: "/wb.png",
+    bb: "/bb.png",
+    rw: "/wr.png",
+    rb: "/br.png",
+    qw: "/wq.png",
+    qb: "/bp.png",
+    kw: "/wk.png",
+    kb: "/bk.png",
   };
 
   return (
