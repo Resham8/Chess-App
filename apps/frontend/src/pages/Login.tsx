@@ -18,7 +18,7 @@ export default function Login() {
   async function handelLoginAsGuest() {
     const response = await axios.post(`${BACKEND_URL}/auth/guest`, {
       name: (guestName.current && guestName.current.value) || "",
-    });
+    }, { withCredentials: true }  );
 
     const user = response.data;
     setUser(user); 
