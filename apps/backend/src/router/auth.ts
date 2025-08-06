@@ -48,11 +48,13 @@ authRouter.post("/guest", async (req: Request, res: Response) => {
     token: token,
     isGuest: true,
   };
-  res.cookie("guest", token, { maxAge: COOKIE_MAX_AGE });
+  res.cookie("guest", token, { maxAge: COOKIE_MAX_AGE, httpOnly: true, });
   res.json(UserDetails);
 });
 
 authRouter.get("/refresh", async (req: Request, res: Response) => {
+  console.log("Cookies:", req.cookies);
+  console.log("User:", req.user);
   if (req.user) {
     const user = req.user as UserDetails;
 

@@ -32,7 +32,7 @@ app.use(
 initPassport();
 
 app.use(passport.initialize());
-app.use(passport.authenticate('session'));
+app.use(passport.session());
 
 app.use("/auth", authRouter);
 
